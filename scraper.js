@@ -15,6 +15,8 @@ start = async () => {
   const page = await browser.newPage();
   await page.goto("https://www.tiktok.com/@funnykittens711");
 
+  let video;
+
   const userProfile = await page.evaluate(() => {
     const image = document
       .querySelector(
@@ -50,13 +52,38 @@ start = async () => {
 
     const postDivs = posts.querySelectorAll("div[data-e2e='user-post-item']");
 
-    const firstVideoImage = postDivs[0]
-      .querySelector("img[src]")
-      .getAttribute("src");
+    let videos = [];
 
-    const firstVideo = postDivs[0]
-      .querySelector("video[src]")
-      .getAttribute("src");
+    postDivs.forEach((post) => {
+      try {
+        let video;
+
+        const firstVideoImage = post
+          .querySelector("img[src]")
+          .getAttribute("src");
+
+        const firstVideoTitle = post
+          .querySelector("img[alt]")
+          .getAttribute("alt");
+
+        // const firstVideo = post.querySelector("video[src]").getAttribute("src");
+
+        const firstVideoViews = post.querySelector(
+          "strong[data-e2e='video-views']"
+        ).innerText;
+
+        video = {
+          firstVideoImage,
+          firstVideoTitle,
+          // firstVideo,
+          firstVideoViews,
+        };
+
+        videos.push(video);
+      } catch (e) {
+        console.log("error: ", e);
+      }
+    });
 
     return {
       image,
@@ -66,15 +93,9 @@ start = async () => {
       followers,
       likes,
       description,
-      firstVideoImage,
-      firstVideo,
+      videos,
     };
   });
-
-  // userProfile.forEach((postItem) => {
-  //   const item = postItem.querySelector("a[href]").getAttribute("href");
-  //   console.log(item);
-  // });
 
   console.log(userProfile);
 
