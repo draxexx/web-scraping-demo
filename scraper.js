@@ -10,12 +10,10 @@ async function getHTML(url) {
   return res.html();
 }
 
-start = async () => {
+tiktokScrappingHandler = async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto("https://www.tiktok.com/@funnykittens711");
-
-  let video;
 
   const userProfile = await page.evaluate(() => {
     const image = document
@@ -99,15 +97,9 @@ start = async () => {
 
   console.log(userProfile);
 
-  // const userStats = await page.evaluate(() => {
-  //   const userStatsTag = document.querySelector(
-  //     ".tiktok-7k173h-H2CountInfos.e1457k4r0"
-  //   );
-
-  //   return userStatsTag.innerText;
-  // });
-
   await browser.close();
+
+  return userProfile;
 };
 
-module.exports = { getHTML, start };
+module.exports = { getHTML, tiktokScrappingHandler };

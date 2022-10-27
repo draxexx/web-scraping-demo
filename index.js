@@ -1,7 +1,17 @@
-const { getHTML, start } = require("./scraper");
+const express = require("express");
+const app = express();
+const port = 3000;
 
-async function go() {
-  console.log(await getHTML("https://twitter.com/GalatasaraySK"));
-}
+//routes
+const tiktok = require("./routes/tiktok");
 
-start();
+app.use(express.json());
+
+// routes
+app.use("/tiktok", tiktok);
+
+module.exports = app;
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
