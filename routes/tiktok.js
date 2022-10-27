@@ -3,9 +3,10 @@ const router = express.Router();
 
 const { tiktokScrappingHandler } = require("../scraper");
 
-router.get("/", async (req, res, next) => {
+router.get("/:username", async (req, res, next) => {
   try {
-    const tiktokResult = await tiktokScrappingHandler();
+    const userName = req.params.username;
+    const tiktokResult = await tiktokScrappingHandler(userName);
 
     return res.json(tiktokResult);
   } catch (error) {

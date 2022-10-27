@@ -10,10 +10,11 @@ async function getHTML(url) {
   return res.html();
 }
 
-tiktokScrappingHandler = async () => {
+tiktokScrappingHandler = async (username) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto("https://www.tiktok.com/@funnykittens711");
+  await page.goto(`https://www.tiktok.com/@${username}`);
+  //funnykittens711
 
   const userProfile = await page.evaluate(() => {
     const image = document
@@ -56,25 +57,21 @@ tiktokScrappingHandler = async () => {
       try {
         let video;
 
-        const firstVideoImage = post
-          .querySelector("img[src]")
-          .getAttribute("src");
+        const image = post.querySelector("img[src]").getAttribute("src");
 
-        const firstVideoTitle = post
-          .querySelector("img[alt]")
-          .getAttribute("alt");
+        const title = post.querySelector("img[alt]").getAttribute("alt");
 
         // const firstVideo = post.querySelector("video[src]").getAttribute("src");
 
-        const firstVideoViews = post.querySelector(
+        const views = post.querySelector(
           "strong[data-e2e='video-views']"
         ).innerText;
 
         video = {
-          firstVideoImage,
-          firstVideoTitle,
-          // firstVideo,
-          firstVideoViews,
+          image,
+          title,
+          // video,
+          views,
         };
 
         videos.push(video);
